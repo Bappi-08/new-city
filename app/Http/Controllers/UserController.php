@@ -10,10 +10,10 @@ use Yajra\DataTables\Html\Columns\Action;
 use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): 
     {
         if ($request->ajax()) {
-            $data = User::select('*');
+            $data = User::select(columns: '*');
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $data = $data->whereBetween('created_at', [$request->from_date, $request->to_date]);

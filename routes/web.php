@@ -1,17 +1,23 @@
 <?php
 
+use App\Models\User_Detail;
 use App\Models\building_category;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Building;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\FloorController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\HoldingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\User_Detail_controller;
+use App\Http\Controllers\UserSelectionController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Building_Category_Controller;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\User_Detail_controller;
-use App\Http\Controllers\UserController;
-use App\Models\User_Detail;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
@@ -40,6 +46,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/information_edit/{id}',[HomeController::class,'bari_edit'])->name('bari_edit');
     // Route::post('/user_update/{id}',[HomeController::class,'user_update'])->name('user_update');
     Route::match(['put', 'post'], 'user_update/{id}', [HomeController::class, 'user_update'])->name('user_update');
+    Route::resource('holding',HoldingController::class);
+    Route::resource('floor',FloorController::class);
+    Route::resource('apartment',ApartmentController::class);
+    Route::resource('member',MemberController::class);
+    Route::get('/full_details/{id}',[MemberController::class,'full_details'])->name('full_details');
    
 });
 
@@ -77,8 +88,29 @@ Route::put('/Building/{id}/updateStatus', [BuildingController::class, 'updateSta
     Route::resource('Building_Category',Building_Category_Controller::class);
     Route::resource('Building',BuildingController::class);
     Route::resource('User_Detail',User_Detail_controller::class);
+ 
+
+// Route::post('/save',[HomeController::class,'save']);
+// Route::get('/list',[HomeController::class,'list']);
+
+// Route::get('/edit/{id}',[HomeController::class,'edit']);
+// Route::post('/edit/{id}',[HomeController::class,'update']);
+
     
 });
 
+Route::get('/fetch-floor/{id}',[HomeController::class,'fetchFloor']);
+Route::get('/fetch-apartment/{id}',[HomeController::class,'fetchApartment']);
+Route::get('/user-selections', [UserSelectionController::class, 'index'])->name('user_selections.index');
+Route::post('/user-selections/store', [UserSelectionController::class, 'store'])->name('user_selections.store');
+Route::delete('/user-selections/{id}', [UserSelectionController::class, 'destroy'])->name('user_selections.destroy');
 
 
+Route::get('/locations/{holding_id}', [LocationController::class, 'index'])->name('location');
+Route::get('/thanas/{district_id}', [LocationController::class, 'getThanas']);
+Route::get('/wards/{thana_id}', [LocationController::class, 'getWards']);
+Route::get('/mohollas/{ward_id}', [LocationController::class, 'getMohollas']);
+Route::post('/locations', [LocationController::class, 'store']);
+Route::get('/locations/edit/{id}', [LocationController::class, 'edit']);
+Route::post('/locations/update/{id}', [LocationController::class, 'update']);
+Route::delete('/locations/{id}', [LocationController::class, 'destroy']);

@@ -114,7 +114,7 @@ class BuildingController extends Controller
         $building = Building::findOrFail($id); // Fetch the building by ID
         return view('backEnd.pages.bari.map', compact('building'));
     }
-    public function updateStatus(Request $request, $id)
+    public function updateStatus(Request $request, $id):
     {
         $userDetail = Building::findOrFail($id);
         $userDetail->status = $request->status;

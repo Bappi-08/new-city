@@ -1,137 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>City Automatic Holding Information System</title>
-    <!-- Bootstrap CDN -->
+@extends('frontEnd.layouts.masters')
+@section('Page-Title', '          Please Provide Your Member Information Here')
+@section('content')
+
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: #f7f9fc;
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-        }
 
-        .container {
-            background-color: #ffffff;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 1000px; /* Optional: Set a max-width for the container */
-            width: 100%; /* Make sure the container doesn't overflow */
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="_token" content="{{ csrf_token() }}">
 
-        .btn-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-top: 30px;
-        }
+    <div class="container mt-1">
+        <div class="row">
+            <!-- Left Side: Provide Your Building Information Button -->
+        
 
-        .btn-custom {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            color: #fff;
-            transition: background-color 0.3s ease;
-        }
+            <!-- Right Side: Add Your Member Information Form -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        {{-- <h3 class="text-center mb-4">Add Your Member Information</h3> --}}
 
-        .btn-custom:nth-child(1) {
-            background-color: #4a90e2; /* Blue */
-        }
+                        <!-- Form Start -->
+                        <form action="" id="frm" name="frm" method="get">
+                            <div class="mb-3">
+                                <label for="holding" class="form-label">Select Holding</label>
+                                <select name="holding_id" id="holding" class="form-select form-select-lg">
+                                    <option value="">Select Holding</option>
+                                    @if (!empty($holdings))
+                                        @foreach ($holdings as $holding)
+                                            <option value="{{ $holding->id }}">{{ $holding->holding }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
 
-        .btn-custom:nth-child(2) {
-            background-color: #50e3c2; /* Light teal */
-        }
+                            <div class="mb-3">
+                                <label for="floor" class="form-label">Select Floor</label>
+                                <select name="floor_id" id="floor" class="form-select form-select-lg">
+                                    <option value="">Select Floor</option>
+                                </select>
+                            </div>
 
-        .btn-custom:nth-child(3) {
-            background-color: #f5a623; /* Orange */
-            color: #fff;
-        }
+                            <div class="mb-3">
+                                <label for="apartment" class="form-label">Select Apartment</label>
+                                <select name="apartment_id" id="apartment" class="form-select form-select-lg">
+                                    <option value="">Select Apartment</option>
+                                </select>
+                            </div>
 
-        .btn-custom:nth-child(4) {
-            background-color: #d0021b; /* Red */
-        }
+                            <!-- Submit Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="new_apartment">Add</button>
+                            </div>
+                        </form>
+                        <!-- Form End -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        .btn-custom:hover {
-            opacity: 0.8;
-        }
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
 
-        h1 {
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #333;
-        }
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
 
-        .user-info-card {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #f7f9fc;
-            padding: 10px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            font-weight: bold;
-            font-size: 0.9rem;
-            color: #333;
-        }
+        $(document).ready(function() {
+            // Fetch floors based on holding selection
+            $('#holding').change(function() {
+                var holding_id = $(this).val();
+                if (holding_id) {
+                    $.ajax({
+                        url: "{{ url('fetch-floor') }}/" + holding_id,
+                        type: "GET",
+                        dataType: "json",
+                        success: function(response) {
+                            $('#floor').empty();
+                            $('#floor').append('<option value="">Select Floor</option>');
+                            $.each(response.floors, function(key, value) {
+                                $('#floor').append('<option value="'+ value.id +'">'+ value.floor +'</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#floor').empty();
+                    $('#floor').append('<option value="">Select Floor</option>');
+                }
+            });
 
-        .footer {
-            text-align: center;
-            padding: 15px;
-            background-color: #f7f9fc;
-            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
-            font-size: 0.9rem;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-        }
+            // Fetch apartments based on floor selection
+            $("#floor").change(function(){
+                var floor_id = $(this).val();
 
-        .footer a {
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
-        }
+                if (floor_id == "") {
+                    floor_id = 0;
+                }
 
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        .logo {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            height: 100px; /* Standardized height */
-            width: auto; /* Maintains aspect ratio */
-            max-width: 150px; /* Standardized max-width */
-        }
+                $.ajax({
+                    url: '{{ url("/fetch-apartment/") }}/'+floor_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {                    
+                        $('#apartment').find('option:not(:first)').remove();
 
-    </style>
-</head>
-<body>
-    <!-- Logo Section -->
-<img src="{{ asset('images/logo.png') }}" alt="City Logo" class="logo">
+                        if (response.cities.length > 0) {
+                            $.each(response.cities, function(key,value){
+                                $("#apartment").append("<option value='"+value['id']+"'>"+value['apartment']+"</option>")
+                            });
+                        } 
+                    }
+                });            
+            });
 
-<div class="container text-center">
-    <h1>Welcome to City Automatic Holding Information System</h1>
-    <div class="btn-container">
-        <a href="{{ route ('create') }}" class="btn btn-custom">Provide Your Building Information</a>
-        <a href="{{ route('user_create') }}" class="btn btn-custom">Provide Your Personal Information</a>
-       
-   
-</div>
-<div class="footer">
-    <p>Developed and Maintained by <a href="https://rajit.net/" target="_blank">RajIT Solutions Ltd</a></p>
-</div>
+            // Handle form submission and dynamically set action URL for `member.show` with apartment_id
+            $('#frm').submit(function(event) {
+                var apartment_id = $('#apartment').val();  // Get the selected apartment ID
 
-<!-- Bootstrap JS and Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+                if (apartment_id) {
+                    // Dynamically set form action to the `member.show` route with apartment_id
+                    var formAction = "{{ route('member.show', '') }}/" + apartment_id;
+                    $(this).attr('action', formAction);  // Set the action attribute
+
+                    // Allow the form to submit
+                    return true;
+                } else {
+                    alert("Please select an apartment");
+                    event.preventDefault();  // Prevent the form from submitting if no apartment is selected
+                }
+            });
+        });
+    </script>
+
+@endsection

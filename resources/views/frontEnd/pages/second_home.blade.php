@@ -129,8 +129,8 @@
     </h1>
     <div class="btn-container">
         <a href="{{ route ('user_information') }}" class="btn btn-custom">User Information</a>
-        <a href="{{ route('third_home') }}" class="btn btn-custom">Provide Your Information</a>
-        <a href="{{ route('forth_home') }}" class="btn btn-custom">Update Your Information</a>
+        <a href="{{ route('third_home') }}" class="btn btn-custom">Add Your Member Details</a>
+        <a href="{{ route('holding.index') }}" class="btn btn-custom">Add Your Building Details </a>
         <a href="#" class="btn btn-custom"
            onclick="event.preventDefault(); document.getElementById('adminlogout').submit();">
             <i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout

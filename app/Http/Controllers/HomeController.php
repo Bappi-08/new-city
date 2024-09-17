@@ -25,8 +25,35 @@ class HomeController extends Controller
 
     public function third_home()
     {   
-        return view('frontEnd.pages.third_home');
+        $holdings =\DB::table('holdings')->orderBy('holding','ASC')->get();
+        $data['holdings'] = $holdings;
+        return view('frontEnd.pages.third_home',$data);
 
+    }
+    
+    // public function index(){
+    //     $countries = \DB::table('countries')->orderBy('name','ASC')->get();
+    //     $data['countries'] = $countries;
+    //     return view('users.create',$data);
+    // }
+
+    public function fetchFloor($holding_id = null) {
+
+        $floor = \DB::table('floors')->where('holding_id',$holding_id)->get();
+
+        return response()->json([
+            'status' => 1,
+            'floors' => $floor
+        ]);
+    }
+
+    public function fetchApartment($floor_id = null) {
+        $apartment = \DB::table('apartments')->where('floor_id',$floor_id)->get();
+
+        return response()->json([
+            'status' => 1,
+            'cities' => $apartment
+        ]);
     }
 
     public function user_information()
@@ -35,7 +62,8 @@ class HomeController extends Controller
         return view('frontEnd.pages.user_information',\compact('user_detail'));
     }
     public function details(string $id)
-     {     $user_detail = User_Detail::with('User', 'Buildings')->find($id);
+     {    
+         $user_detail = User_Detail::with('User', 'Buildings')->find($id);
             
          return view('frontEnd.pages.details',\compact('user_detail'));
     }
@@ -150,6 +178,7 @@ class HomeController extends Controller
          return \redirect()->to('second_home')->with ('success','successfully added');
 
     }
+
   
 
 }

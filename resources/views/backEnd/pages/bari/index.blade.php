@@ -68,6 +68,7 @@
                                             style="padding: 2px 4px; font-size: 14px; height: 30px; width: 80px;"
                                             onchange="this.className = this.options[this.selectedIndex].getAttribute('data-class'); this.form.submit()"
                                             {{ in_array($building->status, ['Approved', 'Declined']) ? 'disabled' : '' }}>
+                                            
                                         <option value="Pending" data-class="form-control form-control-sm bg-warning text-dark" {{ $building->status == 'Pending' ? 'selected' : '' }}>Pending</option>
                                         <option value="Approved" data-class="form-control form-control-sm bg-success text-white" {{ $building->status == 'Approved' ? 'selected' : '' }}>Approved</option>
                                         <option value="Declined" data-class="form-control form-control-sm bg-danger text-white" {{ $building->status == 'Declined' ? 'selected' : '' }}>Declined</option>
