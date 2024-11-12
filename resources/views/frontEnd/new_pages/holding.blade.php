@@ -16,13 +16,17 @@
                     <thead class="bg-light text-dark">
                         <tr>
                             <th>SL. No.</th>
-                            <th> Holding Number</th>
+                            <th> Holding No.</th>
                             <th> Name <br>(Optional)</th>
-                            <th> Building Category</th>
+                            <th> Building Type</th>
                             <th> Address</th>
-                            <th> Floor Details</th>
+                            <th>Added  Floor </th>
+                            <th>Add Floor</th>
+                         
                             <th> Status</th>
+                            <th>PDF</th>
                             <th> Action</th>
+                           
                         </tr>
                     </thead>
                     <tbody>
@@ -41,11 +45,36 @@
                                     </a>
                                 </td>
                                 <td>
+                                
+                                        @if($holding->floors->count() > 0)
+                                            <ul>
+                                                @foreach ($holding->floors as $floor)
+                                                  
+                                                    <a href="{{ route('apartment.show',$floor->id) }}" class="btn btn-outline-primary btn-sm">
+                                                        <i class="fas fa-info-circle"></i> {{ $floor->floor }}
+                                                    </a>
+                                               
+                                                @endforeach
+                                            </ul>
+                                           
+                                        @else
+                                            <span>No floors available</span>
+                                        @endif
+                                  
+                        
+                                </td>
+                                <td>
                                     <a href="{{ route('floor.show',$holding->id) }}" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-info-circle"></i> Floor Details
+                                        <i class="fas fa-info-circle"></i>Click Here
                                     </a>
                                 </td>
+                          
                                 <td>{{ $holding->status }}</td>
+                                <td>
+                                    <a href="{{ route('pdf', $holding->id) }}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye"></i> Preview PDF
+                                    </a>
+                                </td>
                                 <td>
                                     <button class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#editCategoryModal{{ $holding->id }}">
                                         <i class="fas fa-edit"></i> 
@@ -58,6 +87,7 @@
                                         @method('DELETE')
                                     </form>
                                 </td>
+                            
                             </tr>
     
                             <!-- Edit Category Modal -->

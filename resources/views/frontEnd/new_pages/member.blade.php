@@ -2,7 +2,7 @@
 @section('Page-Title', 'Entry Your Member Information')
 @section('content')
 <div class="row">
-    <div class="col-8 ">
+    <div class="col-8 m-auto">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center bg-light-subtle text-white">
                 <h3>Give Your Member Information</h3>
@@ -31,7 +31,6 @@
                             <th>Blood Group</th>
                 
                             <th>Gender</th> --}}
-                            <th>status</th>
                             <th>Full Infomation</th>
                             <th>Action</th>
 
@@ -57,12 +56,12 @@
                                 <td>{{ $member->language }}</td>
                                 <td>{{ $member->blood }}</td>
                                 <td>{{ $member->gender }}</td> --}}
-                                <td>{{ $member->status }}</td>
+                               
                                 <td>  
                                     <a href="{{ route('full_details', $member->id) }}" class="btn btn-outline-info btn-sm">
                                         <i class="fas fa-info-circle"></i> Tap Here
                                     </a>
-                                </td>p[p;]
+                                </td>
                                 <td>
                                     <button class="btn btn-outline-warning btn-sm" data-toggle="modal" data-target="#editApartmentModal{{ $member->id }}">
                                         <i class="fas fa-edit"></i> 
@@ -329,116 +328,96 @@
                 
            
            
-          <!-- Cast -->
+<!-- Cast to Gender in a Compact Design -->
 <div class="modal-body">
-    <div class="form-group">
-        <label for="cast" class="form-label"><i class="fas fa-user-tag"></i> Cast</label><br>
-        <div class="d-flex flex-wrap">
-            @foreach(['Bangali', 'Saotal', 'Chakma', 'Marma', 'Other'] as $cast)
-                <div class="form-check form-check-inline">
-                    <input type="radio" id="{{ strtolower($cast) }}" name="cast" value="{{ $cast }}" class="form-check-input" required>
-                    <label for="{{ strtolower($cast) }}" class="form-check-label">{{ $cast }}</label>
-                </div>
-            @endforeach
+    <!-- Cast, Nationality, Religion Row -->
+    <div class="form-group row">
+        <div class="col-md-4">
+            <label for="cast" class="form-label"><i class="fas fa-user-tag"></i> Cast</label>
+            <select class="form-control border-primary shadow-sm" id="cast" name="cast" required>
+                <option value="">Select Cast</option>
+                <option value="Bangali">Bangali</option>
+                <option value="Saotal">Saotal</option>
+                <option value="Chakma">Chakma</option>
+                <option value="Marma">Marma</option>
+                <option value="Other">Other</option>
+            </select>
+            @error('cast')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
-        @error('cast')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
+
+        <div class="col-md-4">
+            <label for="nationality" class="form-label"><i class="fas fa-flag"></i> Nationality</label>
+            <select class="form-control border-primary shadow-sm" id="nationality" name="nationality" required>
+                <option value="">Select Nationality</option>
+                <option value="Bangladeshi">Bangladeshi</option>
+                <option value="Other">Other</option>
+            </select>
+            @error('nationality')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="col-md-4">
+            <label for="religion" class="form-label"><i class="fas fa-praying-hands"></i> Religion</label>
+            <select class="form-control border-primary shadow-sm" id="religion" name="religion" required>
+                <option value="">Select Religion</option>
+                <option value="Muslim">Muslim</option>
+                <option value="Hindu">Hindu</option>
+                <option value="Christian">Christian</option>
+                <option value="Buddha">Buddha</option>
+                <option value="Other">Other</option>
+            </select>
+            @error('religion')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
+
+    <!-- Mother Tongue, Marital Status, Gender Row -->
+    <div class="form-group row">
+        <div class="col-md-4">
+            <label for="language" class="form-label"><i class="fas fa-language"></i> Mother Tongue</label>
+            <select class="form-control border-primary shadow-sm" id="language" name="language" required>
+                <option value="">Select Mother Tongue</option>
+                <option value="Bangla">Bangla</option>
+                <option value="English">English</option>
+                <option value="Other">Other</option>
+            </select>
+            @error('language')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="col-md-4">
+            <label for="marital" class="form-label"><i class="fas fa-heart"></i> Marital Status</label>
+            <select class="form-control border-primary shadow-sm" id="marital" name="marital" required>
+                <option value="">Select Marital Status</option>
+                <option value="Single">Single</option>
+                <option value="Married">Married</option>
+                <option value="Divorced">Divorced</option>
+                <option value="Widowed">Widowed</option>
+            </select>
+            @error('marital')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
+
+        <div class="col-md-4">
+            <label for="gender" class="form-label"><i class="fas fa-genderless"></i> Gender</label>
+            <select class="form-control border-primary shadow-sm" id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            @error('gender')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
+        </div>
     </div>
 </div>
-
-<!-- Nationality -->
-<div class="modal-body">
-    <div class="form-group">
-        <label for="nationality" class="form-label"><i class="fas fa-flag"></i> Nationality</label><br>
-        <div class="d-flex flex-wrap">
-            <div class="form-check form-check-inline">
-                <input type="radio" id="bangladeshi" name="nationality" value="Bangladeshi" class="form-check-input" required>
-                <label for="bangladeshi" class="form-check-label">Bangladeshi</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input type="radio" id="other_nationality" name="nationality" value="Other" class="form-check-input">
-                <label for="other_nationality" class="form-check-label">Others</label>
-            </div>
-        </div>
-        @error('nationality')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-</div>
-
-<!-- Religion -->
-<div class="modal-body">
-    <div class="form-group">
-        <label for="religion" class="form-label"><i class="fas fa-praying-hands"></i> Religion</label><br>
-        <div class="d-flex flex-wrap">
-            @foreach(['Muslim', 'Hindu', 'Christian', 'Buddha', 'Other'] as $religion)
-                <div class="form-check form-check-inline">
-                    <input type="radio" id="{{ strtolower($religion) }}" name="religion" value="{{ $religion }}" class="form-check-input" required>
-                    <label for="{{ strtolower($religion) }}" class="form-check-label">{{ $religion }}</label>
-                </div>
-            @endforeach
-        </div>
-        @error('religion')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-</div>
-
-<!-- Mother Tongue -->
-<div class="modal-body">
-    <div class="form-group">
-        <label for="language" class="form-label"><i class="fas fa-language"></i> Mother Tongue</label><br>
-        <div class="d-flex flex-wrap">
-            @foreach(['Bangla', 'English', 'Other'] as $language)
-                <div class="form-check form-check-inline">
-                    <input type="radio" id="{{ strtolower($language) }}" name="language" value="{{ $language }}" class="form-check-input" required>
-                    <label for="{{ strtolower($language) }}" class="form-check-label">{{ $language }}</label>
-                </div>
-            @endforeach
-        </div>
-        @error('language')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-</div>
-
-<!-- Marital Status -->
-<div class="modal-body">
-    <div class="form-group">
-        <label for="marital" class="form-label"><i class="fas fa-heart"></i> Marital Status</label><br>
-        <div class="d-flex flex-wrap">
-            @foreach(['Single', 'Married', 'Divorced', 'Widowed'] as $status)
-                <div class="form-check form-check-inline">
-                    <input type="radio" id="{{ strtolower($status) }}" name="marital" value="{{ $status }}" class="form-check-input" required>
-                    <label for="{{ strtolower($status) }}" class="form-check-label">{{ $status }}</label>
-                </div>
-            @endforeach
-        </div>
-        @error('marital')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-</div>
-
-<!-- Gender -->
-<div class="modal-body">
-    <div class="form-group">
-        <label for="gender" class="form-label"><i class="fas fa-genderless"></i> Gender</label><br>
-        <div class="d-flex flex-wrap">
-            @foreach(['Male', 'Female', 'Other'] as $gender)
-                <div class="form-check form-check-inline">
-                    <input type="radio" id="{{ strtolower($gender) }}" name="gender" value="{{ strtolower($gender) }}" class="form-check-input" required>
-                    <label for="{{ strtolower($gender) }}" class="form-check-label">{{ $gender }}</label>
-                </div>
-            @endforeach
-        </div>
-        @error('gender')
-            <span class="text-danger">{{ $message }}</span>
-        @enderror
-    </div>
-</div>
-
 
 
                 <div class="modal-footer">

@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Apartment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Floor extends Model
 {
@@ -12,4 +13,9 @@ class Floor extends Model
 {
     return $this->belongsTo(Holding::class,'holding_id');
 }
+public function apartments()
+{
+    return $this->hasMany(Apartment::class);
+}
+
 }

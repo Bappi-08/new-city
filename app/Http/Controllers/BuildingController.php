@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Building;
@@ -8,22 +7,23 @@ use Illuminate\Http\Request;
 
 class BuildingController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
-    {   
-          $buildings = Building::with('Building_Categor')->get();
-        return view('backEnd.pages.bari.index',\compact('buildings'));
+    {
+        // Correct the relationship name
+        $buildings = Building::with('buildingCategory')->get();
+        return view('backEnd.pages.bari.index', compact('buildings'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {   $bappi= Building_Category::CategoryOption();
-        // dd($bappi);
-        return view('backEnd.pages.bari.create',\compact('bappi'));
+    {
+        $bappi = Building_Category::CategoryOption();
+        return view('backEnd.pages.bari.create', compact('bappi'));
     }
 
     /**
@@ -31,49 +31,41 @@ class BuildingController extends Controller
      */
     public function store(Request $request)
     {
-      //  return $request->all();
-       //  dd($request->all());
-          $this->validate($request,
-          [ 'name'=>'required',
-            'owner'=>'required',
-            'holding'=>'required',
-            'flat'=>'required',
-            'floor'=>'required',
-            'address'=>'required',
-            'building_id'=>'required'
-            
+        // Validate the request
+        $this->validate($request, [
+            'name' => 'required',
+            'owner' => 'required',
+            'holding' => 'required',
+            'flat' => 'required',
+            'floor' => 'required',
+            'address' => 'required',
+            'building_id' => 'required',
         ]);
-        $category=new Building();
-        $category->building_id=$request->building_id;
-        $category->owner=$request->owner;
-        $category->flat=$request->flat;
-        $category->holding=$request->holding;
-        $category->address=$request->address;
-        $category->name=$request->name;
-        $category->floor=$request->floor;
-        $category->latitude=$request->latitude;
-        $category->longitude=$request->longitude;
-       // return $category;
-        $category->save();
-        return \redirect()->to('admin/Building')->with ('success','successfully added');
-    }
-    
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        // Save the building
+        $building = new Building();
+        $building->building_id = $request->building_id;
+        $building->owner = $request->owner;
+        $building->flat = $request->flat;
+        $building->holding = $request->holding;
+        $building->address = $request->address;
+        $building->name = $request->name;
+        $building->floor = $request->floor;
+        $building->latitude = $request->latitude;
+        $building->longitude = $request->longitude;
+        $building->save();
+
+        return redirect()->to('admin/Building')->with('success', 'Successfully added');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
-    {   $category=Building::find($id);
-        $bappi= Building_Category::CategoryOption();
-        return view('backEnd.pages.bari.edit',\compact('category','bappi'));
+    {
+        $category = Building::find($id);
+        $bappi = Building_Category::CategoryOption();
+        return view('backEnd.pages.bari.edit', compact('category', 'bappi'));
     }
 
     /**
@@ -81,47 +73,60 @@ class BuildingController extends Controller
      */
     public function update(Request $request, string $id)
     {
-         // return $request->all();
-        // dd($request->all());
-      //  $this->validate($request,['building_type'=>'required']);
-        $category=Building::find($id);
-       // $category->building_id=$request->building_id;
-        $category->owner=$request->owner;
-        $category->flat=$request->flat;
-        $category->holding=$request->holding;
-        $category->address=$request->address;
-        $category->name=$request->name;
-        $category->floor=$request->floor;
-        $category->building_id=$request->building_id;
-        $category->latitude=$request->latitude;
-        $category->longitude=$request->longitude;
-       // return $category;
-      ///  return $category;
-        $category->save();
-        return \redirect()->to('admin/Building')->with ('success','successfully added');
+        // Validate the request
+        $this->validate($request, [
+            'name' => 'required',
+            'owner' => 'required',
+            'holding' => 'required',
+            'flat' => 'required',
+            'floor' => 'required',
+            'address' => 'required',
+            'building_id' => 'required',
+        ]);
+
+        // Find and update the building
+        $building = Building::find($id);
+        $building->building_id = $request->building_id;
+        $building->owner = $request->owner;
+        $building->flat = $request->flat;
+        $building->holding = $request->holding;
+        $building->address = $request->address;
+        $building->name = $request->name;
+        $building->floor = $request->floor;
+        $building->latitude = $request->latitude;
+        $building->longitude = $request->longitude;
+        $building->save();
+
+        return redirect()->to('admin/Building')->with('success', 'Successfully updated');
     }
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {  // return $id;
+    {
         Building::find($id)->delete();
-        return \redirect()->to('admin/Building')->with ('success','successfully deleted');
+        return redirect()->to('admin/Building')->with('success', 'Successfully deleted');
     }
+
+    /**
+     * Show the map for the specified building.
+     */
     public function showMap($id)
     {
         $building = Building::findOrFail($id); // Fetch the building by ID
         return view('backEnd.pages.bari.map', compact('building'));
     }
-    public function updateStatus(Request $request, $id):
-    {
-        $userDetail = Building::findOrFail($id);
-        $userDetail->status = $request->status;
-        $userDetail->save();
-    
-        return \redirect()->to('admin/Building')->with ('success','successfully added');
-    }
-    
 
+    /**
+     * Update the status of the specified building.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $building = Building::findOrFail($id);
+        $building->status = $request->status;
+        $building->save();
+
+        return redirect()->to('admin/Building')->with('success', 'Status updated successfully');
+    }
 }

@@ -1,5 +1,5 @@
 @extends('frontEnd.layouts.masters')
-@section('Page-Title', '          Please Provide Your Member Information Here')
+@section('Page-Title', 'Please Provide Your Member Information Here')
 @section('content')
 
     <!-- Bootstrap CSS -->
@@ -12,13 +12,17 @@
     <div class="container mt-1">
         <div class="row">
             <!-- Left Side: Provide Your Building Information Button -->
-        
 
             <!-- Right Side: Add Your Member Information Form -->
             <div class="col-md-6">
                 <div class="card shadow-sm border-0">
                     <div class="card-body">
                         {{-- <h3 class="text-center mb-4">Add Your Member Information</h3> --}}
+
+                        <!-- Back Button -->
+                        <div class="mb-3">
+                            <a href="javascript:history.back()" class="btn btn-secondary mb-3">Back</a>
+                        </div>
 
                         <!-- Form Start -->
                         <form action="" id="frm" name="frm" method="get">

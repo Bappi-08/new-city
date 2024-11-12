@@ -105,6 +105,51 @@
                                 </a>
                             </div>
                         </div>
+                        
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i data-feather="bell" class="icon-lg"></i>
+                                <span class="badge bg-danger rounded-pill">{{ \Illuminate\Notifications\DatabaseNotification::whereNull('read_at')->count() }}</span> <!-- Count all unread notifications -->
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                                aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> Notifications </h6>
+                                        </div>
+                                        <div class="col-auto">
+                                            <form action="{{ route('notifications.deleteAll') }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-link small text-reset text-decoration-underline">Delete all notifications</button> <!-- Change button text -->
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar style="max-height: 230px;">
+                                    @php
+                                        // Fetch all unread notifications from the notifications table
+                                        $allNotifications = \Illuminate\Notifications\DatabaseNotification::whereNull('read_at')->latest()->get();
+                                    @endphp
+                        
+                                    @foreach ($allNotifications as $notification)
+                                    <a href="{{ route('admin.hold', $notification->data['user_id']) }}" class="text-reset notification-item">
+                                        <div class="d-flex">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">{{ $notification->data['user_name'] }}</h6>
+                                                <div class="font-size-13 text-muted">
+                                                    <p class="mb-1">{{ $notification->data['message'] }}</p>
+                                                    <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>{{ $notification->created_at->diffForHumans() }}</span></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                        
 
                         <div class="dropdown d-none d-sm-inline-block">
                             <button type="button" class="btn header-item" id="mode-setting-btn">
@@ -161,15 +206,21 @@
                         <ul class="metismenu list-unstyled" id="side-menu">
                             <li class="menu-title" data-key="t-menu">Menu</li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route ('admin.users') }}">
                                   
                                     <i class="bx bx-user"></i>
                                     <span data-key="t-dashboard">Users</span>
                                 </a>
+                            </li> --}}
+                            <li>
+                                <a href="{{ route ('admin.owners.index') }}">
+                                  
+                                    <i class="bx bx-user"></i>
+                                    <span data-key="t-dashboard">Owners</span>
+                                </a>
                             </li>
                             
-                     
 
                             <li>
                                 <a href="{{ route ('admin.Building_Category.index') }}">
@@ -180,20 +231,20 @@
                             </li>
                             
                             <li>
-                                <a href="{{ route ('admin.Building.index') }}">
+                                <a href="{{ route ('admin.hold',2) }}">
                                   
                                      <i class="bx bx-map"></i>
                                     <span data-key="t-dashboard">Building </span>
                                 </a>
                             </li>
+                      
                             <li>
-                                <a href="{{ route ('admin.User_Detail.index') }}">
-                                  
-                                     <i class="bx bx-home-circle"></i>
-                                    <span data-key="t-dashboard">User Details </span>
+                             
+                                    <a href="{{ route('admin.settings') }}">
+                                     <i class="bx bx-cog"></i>
+                                    <span data-key="t-dashboard">Site Settings</span>
                                 </a>
                             </li>
-
                         
                           
 
@@ -231,7 +282,7 @@
                 @yield('content')
              </section>
 
-
+             
                 <footer class="footer">
                     <div class="container-fluid">
                         <div class="row">
@@ -265,5 +316,6 @@
      
 
     </body>
+    
 
 </html>

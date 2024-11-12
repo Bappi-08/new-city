@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('ward_name');
             $table->string('moholla_name');
             $table->string('holding_id');
+            $table->decimal('latitude', 10, 7)->nullable(); // Add latitude field
+            $table->decimal('longitude', 10, 7)->nullable();
             $table->timestamps();
         });
     }

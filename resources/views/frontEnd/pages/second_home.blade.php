@@ -22,8 +22,8 @@
             border-radius: 15px;
             padding: 40px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            max-width: 1000px; /* Optional: Set a max-width for the container */
-            width: 100%; /* Make sure the container doesn't overflow */
+            max-width: 1000px;
+            width: 100%;
         }
 
         .btn-container {
@@ -43,20 +43,20 @@
         }
 
         .btn-custom:nth-child(1) {
-            background-color: #4a90e2; /* Blue */
+            background-color: #4a90e2;
         }
 
         .btn-custom:nth-child(2) {
-            background-color: #50e3c2; /* Light teal */
+            background-color: #50e3c2;
         }
 
         .btn-custom:nth-child(3) {
-            background-color: #f5a623; /* Orange */
+            background-color: #f5a623;
             color: #fff;
         }
 
         .btn-custom:nth-child(4) {
-            background-color: #d0021b; /* Red */
+            background-color: #d0021b;
         }
 
         .btn-custom:hover {
@@ -103,51 +103,52 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
         .logo {
             position: absolute;
             top: 20px;
             left: 20px;
-            height: 100px; /* Standardized height */
-            width: auto; /* Maintains aspect ratio */
-            max-width: 150px; /* Standardized max-width */
+            height: 100px;
+            width: auto;
+            max-width: 150px;
         }
 
     </style>
 </head>
 <body>
+
     <!-- Logo Section -->
-<img src="{{ asset('images/logo.png') }}" alt="City Logo" class="logo">
+    <img src="{{ '/storage/' . $appSetting->website_logo ?? 'website logo' }}" alt="Rajshahi City Corporation Logo" class="logo">
 
-<div class="user-info-card">
-    Welcome: {{ Auth::user()->name }}
-</div>
-
-<div class="container text-center">
-    <h1>
-        <span>Welcome to</span> <br>
-        <span>City Automatic Holding Information System</span>
-    </h1>
-    <div class="btn-container">
-        <a href="{{ route ('user_information') }}" class="btn btn-custom">User Information</a>
-        <a href="{{ route('third_home') }}" class="btn btn-custom">Add Your Member Details</a>
-        <a href="{{ route('holding.index') }}" class="btn btn-custom">Add Your Building Details </a>
-        <a href="#" class="btn btn-custom"
-           onclick="event.preventDefault(); document.getElementById('adminlogout').submit();">
-            <i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout
-        </a>
+    <div class="user-info-card">
+        Welcome: {{ Auth::user()->name }}
     </div>
-    @auth
-    <form action="{{ route('logout') }}" method="post" id="adminlogout" class="d-none">
-        @csrf
-    </form>
-    @endauth
-</div>
-<div class="footer">
-    <p>Developed and Maintained by <a href="https://rajit.net/" target="_blank">RajIT Solutions Ltd</a></p>
-</div>
 
-<!-- Bootstrap JS and Popper.js -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <div class="container text-center">
+        <h1>
+            <span>Welcome to</span> <br>
+            <span>{{ $appSetting->website_name }}</span>
+        </h1>
+        <div class="btn-container">
+            <a href="{{ route('third_home') }}" class="btn btn-custom">Add Your Member Details</a>
+            <a href="{{ route('holding.index') }}" class="btn btn-custom">Add Your Building Details</a>
+            <a href="#" class="btn btn-custom" onclick="event.preventDefault(); document.getElementById('adminlogout').submit();">
+                <i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout
+            </a>
+        </div>
+        @auth
+        <form action="{{ route('logout') }}" method="post" id="adminlogout" class="d-none">
+            @csrf
+        </form>
+        @endauth
+    </div>
+
+    <div class="footer">
+        <p>Developed and Maintained by <a href="https://rajit.net/" target="_blank">RajIT Solutions Ltd</a></p>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

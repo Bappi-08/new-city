@@ -2,7 +2,7 @@
 <html lang="en">
 
     <head>
-
+        
         <meta charset="utf-8" />
         <title>Rajshahi City Corporation Automatic Holding System Admin Panel</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"
@@ -161,36 +161,36 @@
                         <ul class="metismenu list-unstyled" id="side-menu">
                             <li class="menu-title" data-key="t-menu">Menu</li>
 
-                            <li>
+                            {{-- <li>
                                 <a href="{{ route ('admin.users') }}">
                                   
                                     <i class="bx bx-user"></i>
                                     <span data-key="t-dashboard">Users</span>
                                 </a>
                             </li>
-                            
+                             --}}
                      
 
                             <li>
-                                <a href="{{ route ('admin.Building_Category.index') }}">
+                                <a href="{{ url ('/second_home') }}">
                                   
                                     <i class="bx bx-buildings"></i>
-                                    <span data-key="t-dashboard">Building Category</span>
+                                    <span data-key="t-dashboard">Home Page</span>
                                 </a>
                             </li>
                             
                             <li>
-                                <a href="{{ route ('admin.Building.index') }}">
+                                <a href="{{ route ('holding.index') }}">
                                   
                                      <i class="bx bx-map"></i>
-                                    <span data-key="t-dashboard">Building </span>
+                                    <span data-key="t-dashboard"> Entry Your Building </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route ('admin.User_Detail.index') }}">
+                                <a href="{{ route ('third_home') }}">
                                   
                                      <i class="bx bx-home-circle"></i>
-                                    <span data-key="t-dashboard">User Details </span>
+                                    <span data-key="t-dashboard">Add Member </span>
                                 </a>
                             </li>
 

@@ -35,20 +35,37 @@ class LocationController extends Controller
         $mohollas = Moholla::where('ward_id', $ward_id)->get();
         return response()->json($mohollas);
     }
-
     public function store(Request $request)
     {
-        $locationSelection = new LocationSelection();
-        $locationSelection->district_name = $request->district_name;
-        $locationSelection->thana_name = $request->thana_name;
-        $locationSelection->ward_name = $request->ward_name;
-        $locationSelection->moholla_name = $request->moholla_name;
-        $locationSelection->holding_id = $request->holding_id;
+        // Check if there is already a record for the given holding_id
+        $locationSelection = LocationSelection::where('holding_id', $request->holding_id)->first();
+    
+        if ($locationSelection) {
+            // If a record exists, update it
+            $locationSelection->district_name = $request->district_name;
+            $locationSelection->thana_name = $request->thana_name;
+            $locationSelection->ward_name = $request->ward_name;
+            $locationSelection->moholla_name = $request->moholla_name;
+            $locationSelection->latitude = $request->latitude;
+            $locationSelection->longitude = $request->longitude;
+           
+        } else {
+            // If no record exists, create a new one
+            $locationSelection = new LocationSelection();
+            $locationSelection->district_name = $request->district_name;
+            $locationSelection->thana_name = $request->thana_name;
+            $locationSelection->ward_name = $request->ward_name;
+            $locationSelection->moholla_name = $request->moholla_name;
+            $locationSelection->holding_id = $request->holding_id;
+            $locationSelection->latitude = $request->latitude;
+            $locationSelection->longitude = $request->longitude;
+        }
+    
         $locationSelection->save();
-
+    
         return redirect()->back()->with('success', 'Location saved successfully.');
     }
-
+    
     public function edit($id)
     {
         $location = LocationSelection::find($id);
@@ -63,6 +80,8 @@ class LocationController extends Controller
         $locationSelection->thana_name = $request->thana_name;
         $locationSelection->ward_name = $request->ward_name;
         $locationSelection->moholla_name = $request->moholla_name;
+        $locationSelection->latitude = $request->latitude;
+        $locationSelection->longitude = $request->longitude;
         $locationSelection->save();
 
         return redirect()->back()->with('success', 'Location updated successfully.');

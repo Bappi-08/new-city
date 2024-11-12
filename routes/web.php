@@ -1,12 +1,16 @@
 <?php
 
+use App\Http\Controllers\SettingController;
+use App\Models\Holding;
 use App\Models\User_Detail;
 use App\Models\building_category;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Back_Holding;
 use App\Http\Controllers\Admin\Building;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FloorController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\HoldingController;
 use App\Http\Controllers\ProfileController;
@@ -14,9 +18,11 @@ use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\ApartmentController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\User_Detail_controller;
 use App\Http\Controllers\UserSelectionController;
 use App\Http\Controllers\Admin\CategoryController;
+use Illuminate\Notifications\DatabaseNotification;
 use App\Http\Controllers\Building_Category_Controller;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -35,6 +41,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/',[HomeController::class,'home'])->name('home');
 Route::get('/user_information',[HomeController::class,'user_information'])->name('user_information');
 Route::get('/details/{id}',[HomeController::class,'details'])->name('details');
+
 Route::middleware('auth')->group(function () {
     Route::get('/second_home',[HomeController::class,'second_home']);
     Route::get('/third_home',[HomeController::class,'third_home'])->name('third_home');
@@ -67,12 +74,17 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 Route ::middleware(['auth','is_admin'])->prefix('admin')->name('admin.')->group(function()
 {   Route::get('/dashboard',function()
-    {   return view ('backEnd.layouts.masters');
+    {   return view ('backEnd.layouts.dashboard');
 
     });
+   
+    Route::get('settings',[SettingController::class,'index'])->name('settings');
+    Route::post('settings',[SettingController::class,'store'])->name('settings.store');
+    Route::get('/hold/{id}',[Back_Holding::class,'index'])->name('hold');
     Route::get('/profile',[Building_Category_Controller::class,'profile'])->name('profile');
     Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     
+    Route::resource('owners', OwnerController::class);
 
 Route::put('/User_Detail/{id}/updateStatus', [User_Detail_controller::class, 'updateStatus'])->name('User_Detail.updateStatus');
 Route::put('/Building/{id}/updateStatus', [BuildingController::class, 'updateStatus'])->name('Building.updateStatus');
@@ -101,9 +113,9 @@ Route::put('/Building/{id}/updateStatus', [BuildingController::class, 'updateSta
 
 Route::get('/fetch-floor/{id}',[HomeController::class,'fetchFloor']);
 Route::get('/fetch-apartment/{id}',[HomeController::class,'fetchApartment']);
-Route::get('/user-selections', [UserSelectionController::class, 'index'])->name('user_selections.index');
-Route::post('/user-selections/store', [UserSelectionController::class, 'store'])->name('user_selections.store');
-Route::delete('/user-selections/{id}', [UserSelectionController::class, 'destroy'])->name('user_selections.destroy');
+// Route::get('/user-selections', [UserSelectionController::class, 'index'])->name('user_selections.index');
+// Route::post('/user-selections/store', [UserSelectionController::class, 'store'])->name('user_selections.store');
+// Route::delete('/user-selections/{id}', [UserSelectionController::class, 'destroy'])->name('user_selections.destroy');
 
 
 Route::get('/locations/{holding_id}', [LocationController::class, 'index'])->name('location');
@@ -114,3 +126,19 @@ Route::post('/locations', [LocationController::class, 'store']);
 Route::get('/locations/edit/{id}', [LocationController::class, 'edit']);
 Route::post('/locations/update/{id}', [LocationController::class, 'update']);
 Route::delete('/locations/{id}', [LocationController::class, 'destroy']);
+Route::post('/admin/owners/sendEmail/{id}', [OwnerController::class, 'sendEmail'])->name('admin.owners.sendEmail');
+
+Route::put('holdings/{id}/status', [HoldingController::class, 'updateStatus'])->name('holding.updateStatus');
+
+
+
+Route::post('/notifications/deleteAll', function () {
+    DatabaseNotification::truncate(); // Delete all notifications for all users
+    return redirect()->back();
+})->name('notifications.deleteAll');
+
+Route::get('holding/{id}/pdf', [Back_Holding::class, 'generatePDF'])->name('pdf');
+Route::post('/notifications/markAsRead', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
+
+

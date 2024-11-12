@@ -131,7 +131,7 @@
 <body>
 
 <!-- Logo Section -->
-<img src="{{ asset('images/logo.png') }}" alt="City Logo" class="logo">
+<img src="{{ '/storage/' . $appSetting->website_logo ?? 'website logo' }}" alt="Rajshahi City Corporation Logo" class="logo">
 
 <div class="container text-center">
     <h1>
@@ -142,9 +142,9 @@
         @guest
         <a href="{{ route ('login') }}" class="btn btn-custom">Login</a>
         @endguest
-        @auth
+        {{-- @auth
         <a href="{{ route('user_information') }}" class="btn btn-custom">User Information</a>
-        @endauth
+        @endauth --}}
         
         @guest
         <a href="{{ route('register') }}" class="btn btn-custom">Register</a>

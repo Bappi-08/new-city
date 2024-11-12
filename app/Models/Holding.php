@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Floor;
+use App\Models\LocationSelection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Holding extends Model
 {
@@ -16,5 +18,17 @@ public function User ()
 {
     return $this->belongsTo(User::class,'user_id');
 }
+public function floors()
+{
+    return $this->hasMany(Floor::class);
 }
 
+// Holding.php
+// Holding.php
+public function location()
+{
+    return $this->hasOne(LocationSelection::class, 'holding_id', 'id');
+}
+
+
+}

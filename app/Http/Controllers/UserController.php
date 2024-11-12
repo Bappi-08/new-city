@@ -1,19 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-use DataTables;
-use App\Models\User;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Yajra\DataTables\Html\Columns\Action;
-use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables; // Correct import
+
 class UserController extends Controller
 {
-    public function index(Request $request): 
+    public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::select(columns: '*');
+            $data = User::query(); // Corrected select usage
 
             if ($request->filled('from_date') && $request->filled('to_date')) {
                 $data = $data->whereBetween('created_at', [$request->from_date, $request->to_date]);

@@ -56,26 +56,7 @@
                                     <a href="{{ route('admin.Building.showMap', $building->id) }}" class="btn btn-success btn-sm" target="_blank">View on Map</a>
                                 </div>
                             </td>
-                            <td>
-                                <form action="{{ route('admin.Building.updateStatus', $building->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    
-                                    <select id="status-{{ $building->id }}" name="status" class="form-control form-control-sm
-                                            {{ $building->status == 'Pending' ? 'bg-warning text-dark' : '' }}
-                                            {{ $building->status == 'Approved' ? 'bg-success text-white' : '' }}
-                                            {{ $building->status == 'Declined' ? 'bg-danger text-white' : '' }}" 
-                                            style="padding: 2px 4px; font-size: 14px; height: 30px; width: 80px;"
-                                            onchange="this.className = this.options[this.selectedIndex].getAttribute('data-class'); this.form.submit()"
-                                            {{ in_array($building->status, ['Approved', 'Declined']) ? 'disabled' : '' }}>
-                                            
-                                        <option value="Pending" data-class="form-control form-control-sm bg-warning text-dark" {{ $building->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-                                        <option value="Approved" data-class="form-control form-control-sm bg-success text-white" {{ $building->status == 'Approved' ? 'selected' : '' }}>Approved</option>
-                                        <option value="Declined" data-class="form-control form-control-sm bg-danger text-white" {{ $building->status == 'Declined' ? 'selected' : '' }}>Declined</option>
-                                    </select>
-                                </form>
-                            </td>
-                            
+                                                     
                         </tr>
                     @endforeach
                 </tbody>
